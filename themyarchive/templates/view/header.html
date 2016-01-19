@@ -1,0 +1,37 @@
+<div id="themyarchive-header" dir="ltr">
+    <div>
+        This is <a href="/">themyarchive</a> of <a href="{{ url.url }}" dir="ltr">{{ url.url }}</a>.
+        It is a snapshot of the page as it appeared on {{ variant.archived_at.strftime("%d %b %Y %H:%M:%S") }} GMT.
+    </div>
+    <div></div>
+    <div>
+        {% for variant in variants %}
+            <span style="display: inline-block !important; margin-top: 8px !important; margin-right: 104px !important; white-space: nowrap !important;">
+                <span style="margin-right: 28px !important;">
+                    {% if variant.views %}
+                        {% if variant.is_current %}
+                            <span style="font-weight: bold !important;">{{ variant.title }}</span>:
+                        {% else %}
+                            {{ variant.title }}:
+                        {% endif %}
+
+                        {% for view in variant.views %}
+                            {% if view.is_current %}
+                                <span style="font-weight: bold !important;">{{ view.title }}</span>
+                            {% else %}
+                                <a href="{{ view.url }}">{{ view.title }}</a>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        {% if variant.is_current %}
+                            <span style="font-weight: bold !important;">{{ variant.title }}</span>
+                        {% else %}
+                            <a href="{{ variant.url }}">{{ variant.title }}</a>
+                        {% endif %}
+                    {% endif %}
+                </span>
+            </span>
+        {% endfor %}
+        <span style="display: inline-block !important; margin-top: 8px !important; color: #717171 !important;"></span>
+    </div>
+</div>

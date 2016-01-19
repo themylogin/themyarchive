@@ -1,0 +1,47 @@
+body {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+}
+#themyarchive-header {
+    background: #f5f5f5 !important;
+    font: 13px arial, sans-serif !important;
+    text-align: left !important;
+    color: #202020 !important;
+    border: 0 !important;
+    margin: 0 !important;
+    border-bottom: 1px solid #cecece !important;
+    line-height: 16px !important;
+    padding: 16px 28px 24px 28px !important;
+}
+#themyarchive-header * {
+    display: inline !important;
+    font: inherit !important;
+    text-align: inherit !important;
+    color: inherit !important;
+    line-height: inherit !important;
+    background: none !important;
+    border: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    letter-spacing: 0 !important;
+}
+#themyarchive-header a {
+    text-decoration: none !important;
+    color: #1a0dab !important;
+}
+#themyarchive-header a:hover {
+    text-decoration: underline !important;
+}
+#themyarchive-header a:visited {
+    color: #609 !important;
+}
+#themyarchive-header div {
+    display: block !important;
+    margin-top: 4px !important;
+}
+#themyarchive-header b {
+    font-weight: bold !important;
+    display: inline-block !important;
+    direction: ltr !important;
+}
