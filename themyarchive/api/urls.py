@@ -11,15 +11,11 @@ from themyarchive.utils import url_for_url
 
 logger = logging.getLogger(__name__)
 
-__all__ = [b"RecentUrls"]
+__all__ = [b"RecentUrls", b"SearchUrls"]
 
 
-class RecentUrls(Resource):
-    def get(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument("limit", help="Number of URLs to return", type=int, default=50)
-        args = parser.parse_args()
-
+class UrlsResource(Resource):
+    def _serve_urls(self, urls):
         return [{"url": url.url,
                  "view": url_for_url(url),
                  "archived_at": url.archived_at.isoformat(),
@@ -27,7 +23,28 @@ class RecentUrls(Resource):
                                "data": variant.data,
                                "is_ready": variant.is_ready}
                               for variant in url.variants]}
-                for url in db.session.query(Url).\
+                 for url in urls]
+
+
+class RecentUrls(UrlsResource):
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("limit", help="Number of URLs to return", type=int, default=50)
+        args = parser.parse_args()
+
+        return self._serve_urls(db.session.query(Url).\
                         options(joinedload(Url.variants)).\
                         order_by(Url.id.desc()).\
-                        limit(args.limit)]
+                        limit(args.limit))
+
+
+class SearchUrls(UrlsResource):
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("q", help="Number of URLs to return", type=str, required=True)
+        args = parser.parse_args()
+
+        return self._serve_urls(db.session.query(Url).\
+                        options(joinedload(Url.variants)).\
+                        filter(Url.url.contains(args.q)).\
+                        order_by(Url.id.desc()))
