@@ -85,13 +85,25 @@ var UrlList = React.createClass({
 
     render: function() {
         var urls = this.state.urls;
+
+        var url2count = {};
+        urls.forEach(url => {
+            if (url2count[url.url] == undefined)
+            {
+                url2count[url.url] = 0;
+            }
+            
+            url2count[url.url]++;
+        });
+
         return (
             <div>
                 <h1>Recent URLs</h1>
                 {
                     urls.map(function(url) {
                         var key = url.url + " " + url.archived_at;
-                        return <UrlListItem key={ key } url={ url } />
+                        var displayDate = url2count[url.url] > 1;
+                        return <UrlListItem key={ key } url={ url } displayDate={ displayDate } />
                     })
                 }
             </div>
@@ -104,11 +116,20 @@ var UrlListItem = React.createClass({
         var url = this.props.url;
         var anythingReady = it.some(url.variants, (variant) => variant.is_ready);
 
+        var date = "";
+        if (this.props.displayDate)
+        {
+            var date = (
+                <div className={ ".url-list-item__date" }>{ url.archived_at }</div>
+            );
+        }
+
         return (
-            <div className={ anythingReady ? "" : "unavailable" }>
+            <div className={ classNames("url-list-item", anythingReady ? "" : "url-list-item_unavailable") }>
                 <span className={ classNames("glyphicon", anythingReady ? "glyphicon-ok" : "glyphicon-time") }></span>
                 { " " }
                 <a href={ url.view } target="_blank">{ url.url }</a>
+                { date }
             </div>
         );
     }
@@ -116,6 +137,6 @@ var UrlListItem = React.createClass({
 
 ReactDOM.render(
     <Index />,
-    document.getElementById("index")
+    document.getElementById("content")
 );
 

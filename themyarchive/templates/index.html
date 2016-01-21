@@ -36,7 +36,7 @@
             <p>Your personal rich internet archive</p>            
         </div>
 
-        <div id="index"></div>
+        <div id="content"></div>
     </div>
 {% endblock %}
 
@@ -47,4 +47,5 @@
 
 {% block styles %}
     {{ super() }}
+    <link rel="stylesheet" href="{{ url_for("static", filename="themyarchive.css") }}" />
 {% endblock %}

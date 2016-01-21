@@ -1,0 +1,4 @@
+#content { margin-bottom: 20px; }
+.url-list-item { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.url-list-item_unavailable, .url-list-item_unavailable a { color: #999999; }
+.url-list-item__date { color: #aaaaaa; }
