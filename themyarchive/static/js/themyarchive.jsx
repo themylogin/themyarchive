@@ -1,4 +1,5 @@
-import classNames from "classnames"
+import classNames from "classnames";
+import Cookies from "js-cookie";
 import it from "iter-tools";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -223,3 +224,5 @@ ReactDOM.render((
         </Route>
     </Router>
 ), document.getElementById("container"));
+
+Cookies.set("resolution", $(window).width().toString() + "x" + $(window).height().toString(), { expires: 365 });
