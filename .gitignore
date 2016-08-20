@@ -38,6 +38,4 @@ nosetests.xml
 # PyCharm
 .idea
 
-data
-themyarchive/config.py
-alembic.ini
+.env

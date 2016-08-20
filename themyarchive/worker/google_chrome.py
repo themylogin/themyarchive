@@ -29,10 +29,10 @@ def google_chrome(variant, fs_archive_path):
 
 
 def take_screenshot(url, width, height, screenshot_path, html_path, pdf_path):
-    docker = Client(base_url=app.config["DOCKER_URL"])
+    docker = Client(base_url="unix://run/docker.sock")
 
     container = docker.create_container(
-        image=app.config["DOCKER_IMAGE"],
+        image="themyarchive_chrome",
         # http://csmarosi.github.io/sigbus.html
         volumes=["/dev/shm", "/run/shm"],
         host_config=docker.create_host_config(binds=[
@@ -56,7 +56,7 @@ def take_screenshot(url, width, height, screenshot_path, html_path, pdf_path):
                     user="chrome", detach=True)
         time.sleep(5)
 
-        run_command(["/bin/bash", "-c", "DISPLAY=:0 google-chrome %s" % pipes.quote(url)],
+        run_command(["/bin/bash", "-c", "DISPLAY=:0 google-chrome --no-sandbox %s" % pipes.quote(url)],
                     user="chrome", detach=True)
         time.sleep(120)
 

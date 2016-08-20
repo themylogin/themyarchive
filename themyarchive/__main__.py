@@ -13,8 +13,6 @@ if os.path.dirname(__file__) in sys.path:
 from celery.task.control import discard_all
 import logging
 
-from themyutils.sqlalchemy.sql import literal_query
-
 from themyarchive import app
 from themyarchive.db import db
 from themyarchive.manager import manager

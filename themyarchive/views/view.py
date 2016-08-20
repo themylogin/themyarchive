@@ -146,5 +146,5 @@ def view(archived_at, variant, scheme, netloc, tail):
                                      rel="stylesheet"))
     if base:
         soup.head.insert(0, soup.new_tag("base", href=base))
-    soup.body.insert(0, list(BeautifulSoup(header).body)[0])
+    soup.body.insert(0, BeautifulSoup(header))
     return Response(soup.prettify())

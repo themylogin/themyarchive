@@ -16,4 +16,4 @@ def url_for_url(url, variant="_"):
     return (url_for("view", archived_at=url.archived_at.strftime(app.config["ARCHIVE_URL_DATETIME_FORMAT"]),
                     variant=variant, scheme=url.scheme, netloc=url.netloc, tail="", _external=True) +
             urllib.quote(url.path[1:]) +
-            (b"?%s" % urllib.quote(url.query, b"/=") if url.query else b""))
+            (b"?%s" % urllib.quote(url.query, b"/=:+&") if url.query else b""))

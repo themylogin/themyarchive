@@ -1,0 +1,71 @@
+version: "2"
+
+services:
+  uwsgi:
+    build: .
+    command: >
+      sh -cex "
+        cd /themyarchive;
+        /virtualenv/bin/alembic upgrade head;
+        exec /virtualenv/bin/uwsgi --master --need-app --module themyarchive:app --processes 5 --enable-threads --chmod-socket=666 --socket /var/run/themyarchive/uwsgi.socket;
+      "
+    env_file: .env
+    links:
+      - postgres
+      - rabbitmq
+    restart: always
+    volumes:
+      - "$DATA:/data"
+      - /run/docker.sock:/run/docker.sock
+      - /var/run/themyarchive
+
+  worker:
+    build: .
+    command: /virtualenv/bin/celery worker -A themyarchive:celery -l DEBUG --concurrency=16
+    env_file: .env
+    environment:
+      C_FORCE_ROOT: "yes"
+    links:
+      - postgres
+      - rabbitmq
+    restart: always
+    volumes_from:
+      - uwsgi
+
+  scheduler:
+    build: .
+    command: /virtualenv/bin/celery beat -A themyarchive:celery -s /var/lib/scheduler/schedule --pidfile=
+    env_file: .env
+    links:
+      - rabbitmq
+    restart: always
+    volumes:
+      - scheduler-data:/var/lib/scheduler
+    volumes_from:
+      - uwsgi
+
+  chrome:
+    build: docker/google-chrome
+    restart: always
+
+  nginx:
+    build: docker/nginx
+    ports:
+      - "$PORT:80"
+    restart: always
+    volumes_from:
+      - uwsgi
+
+  postgres:
+    image: postgres:latest
+    environment:
+      LC_ALL: C.UTF-8
+      POSTGRES_DB: themyarchive
+      POSTGRES_USER: themyarchive
+      POSTGRES_PASSWORD: themyarchive
+
+  rabbitmq:
+    image: rabbitmq:latest
+
+volumes:
+  scheduler-data:

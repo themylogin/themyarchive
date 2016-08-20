@@ -17,7 +17,8 @@ import themyarchive.worker
 
 Bootstrap(app)
 
-runner = sys.argv[0].split("/")[-1]
-if runner in ["celery", "gunicorn", "uwsgi"]:
-    app.config["RAVEN_IGNORE_EXCEPTIONS"] = [HTTPException]
-    sentry = Sentry(app, wrap_wsgi=runner != "gunicorn")
+if app.config["SENTRY_DSN"]:
+    runner = sys.argv[0].split("/")[-1]
+    if runner in ["celery", "gunicorn", "uwsgi"]:
+        app.config["RAVEN_IGNORE_EXCEPTIONS"] = [HTTPException]
+        sentry = Sentry(app, wrap_wsgi=runner != "gunicorn")
