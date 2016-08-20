@@ -16,12 +16,20 @@ import logging
 from themyutils.sqlalchemy.sql import literal_query
 
 from themyarchive import app
+from themyarchive.db import db
 from themyarchive.manager import manager
+from themyarchive.worker.google_chrome import google_chrome
 
 
 @manager.command
 def celery_purge():
     discard_all()
+
+
+@manager.command
+def rerun(query):
+    for i in [row[0] for row in db.session.execute(query)]:
+        google_chrome.delay(i)
 
 
 if __name__ == "__main__":
