@@ -25,7 +25,7 @@ __all__ = [b"Url"]
 class Url(Resource):
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument("url", help="URL to archive", type=str, required=True)
+        parser.add_argument("url", help="URL to archive", type=unicode, required=True)
         args = parser.parse_args()
 
         url = db.session.query(UrlModel).\
@@ -38,7 +38,7 @@ class Url(Resource):
         if url:
             return {"view": url_for_url(url)}
 
-        o = urlparse.urlsplit(urllib.unquote(args["url"]))
+        o = urlparse.urlsplit(urllib.unquote(args["url"].encode("utf-8")))
         if o.scheme == "" or o.netloc == "":
             abort(400)
 
@@ -52,7 +52,7 @@ class Url(Resource):
 
         url.archived_at = datetime.utcnow().replace(microsecond=0)
 
-        hash = hashlib.sha1(url.url + url.archived_at.isoformat()).hexdigest()
+        hash = hashlib.sha1(url.url.encode("utf-8") + url.archived_at.isoformat()).hexdigest()
         url.archive_path = "/".join(filter(None, re.split("(.{2})", hash))[:3] + [hash])
 
         db.session.add(url)

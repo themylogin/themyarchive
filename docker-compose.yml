@@ -21,7 +21,7 @@ services:
 
   worker:
     build: .
-    command: /virtualenv/bin/celery worker -A themyarchive:celery -l DEBUG --concurrency=16
+    command: /virtualenv/bin/celery worker -A themyarchive:celery -l DEBUG --concurrency=8
     env_file: .env
     environment:
       C_FORCE_ROOT: "yes"
@@ -49,7 +49,9 @@ services:
     restart: always
 
   nginx:
-    build: docker/nginx
+    build:
+      dockerfile: docker/nginx/Dockerfile
+      context: .
     ports:
       - "$PORT:80"
     restart: always

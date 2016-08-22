@@ -56,7 +56,7 @@ def take_screenshot(url, width, height, screenshot_path, html_path, pdf_path):
                     user="chrome", detach=True)
         time.sleep(5)
 
-        run_command(["/bin/bash", "-c", "DISPLAY=:0 google-chrome --no-sandbox %s" % pipes.quote(url)],
+        run_command(["/bin/bash", "-c", "DISPLAY=:0 google-chrome --no-sandbox %s" % pipes.quote(url).encode("utf-8")],
                     user="chrome", detach=True)
         time.sleep(120)
 

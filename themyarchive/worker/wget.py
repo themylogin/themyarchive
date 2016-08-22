@@ -23,7 +23,7 @@ def wget(variant, fs_archive_path):
                                        "-P", fs_archive_path,
                                        "-T", "30",
                                        "--restrict-file-names=ascii",
-                                       variant.url.url],
+                                       variant.url.url.encode("utf-8")],
                                        stdout=subprocess.PIPE,
                                        stderr=subprocess.STDOUT).communicate()
     saving_to = re.search(r"Saving to: (.+)", stdout).group(1).decode("utf-8")[1:-1]

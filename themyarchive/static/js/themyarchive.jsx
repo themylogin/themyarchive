@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import Cookies from "js-cookie";
-import it from "iter-tools";
+import itertools from "aureooms-js-itertools";
 import React from "react";
 import ReactDOM from "react-dom";
 import { browserHistory, Router, Route, IndexRoute, Link } from "react-router";
@@ -96,7 +96,7 @@ var Index = React.createClass({
             method: "POST",
             data: {"url": url},
             success: function() {
-                var $success = $("<div/>").addClass("alert alert-success").text("URL " + url + " was added to the worker queue").hide();
+                var $success = $("<div/>").addClass("alert alert-success").css("marginTop", "20px").text("URL " + url + " was added to the worker queue").hide();
                 $(this.refs.messages).prepend($success);
                 $success.slideDown();
                 $success.delay(5000).slideUp();
@@ -108,7 +108,7 @@ var Index = React.createClass({
             error: function(jqXHR, textStatus, errorThrown) {
                 if (jqXHR.responseJSON && jqXHR.responseJSON.message)
                 {
-                    var $error = $("<div/>").addClass("alert alert-danger").text(jqXHR.responseJSON.message).hide();
+                    var $error = $("<div/>").addClass("alert alert-danger").css("marginTop", "20px").text(JSON.stringify(jqXHR.responseJSON.message)).hide();
                     $(this.refs.messages).prepend($error);
                     $error.slideDown();
                     $error.delay(5000).slideUp();
@@ -156,7 +156,7 @@ var UrlList = React.createClass({
 var UrlListItem = React.createClass({
     render: function() {
         var url = this.props.url;
-        var anythingReady = it.some(url.variants, (variant) => variant.is_ready);
+        var anythingReady = itertools.any(url.variants.map((variant) => variant.is_ready));
 
         var date = "";
         if (this.props.displayDate)

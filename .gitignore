@@ -39,3 +39,5 @@ nosetests.xml
 .idea
 
 .env
+
+themyarchive/static/themyarchive.js
